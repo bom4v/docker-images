@@ -28,6 +28,7 @@ RUN apt-get -y install tzdata && echo "Europe/Paris" > /etc/timezone && \
 # Basic, Java and Scala packages
 RUN apt-get -y update && \
 	apt-get -y install sudo less htop net-tools wget curl screen git \
+	apt-transport-https ca-certificates gnupg2 software-properties-common \
 	keychain gawk bash-completion vim-nox emacs-nox apt-utils keyutils ftp \
 	bzip2 gzip tar unzip lsb-release man manpages \
 	sqlite3 python python3 \
