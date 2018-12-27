@@ -1,8 +1,7 @@
 #
-# http://github.com/bom4v/docker-images/tree/master/debian9
+# http://github.com/bom4v/docker-images/tree/master/ubuntu1810
 #
-# Scala and SBT on Debian 9 Stretch with Java OpenJDK 8
-# Script to download Oracle JDK: https://gist.github.com/n0ts/40dd9bd45578556f93e7
+# Scala and SBT on Debian 9 with Java OpenJDK 8
 #
 FROM docker.io/debian:9
 MAINTAINER Denis Arnaud <denis.arnaud_github at m4x dot org>
@@ -30,29 +29,21 @@ RUN apt-get -y install tzdata && echo "Europe/Paris" > /etc/timezone && \
 RUN apt-get -y update && \
 	apt-get -y install sudo less htop net-tools wget curl screen git \
 	keychain gawk bash-completion vim-nox emacs-nox apt-utils keyutils ftp \
-	bzip2 gzip tar unzip lsb-release manpages \
+	bzip2 gzip tar unzip lsb-release man manpages \
 	sqlite3 python python3 \
-	man rake ruby-nokogiri
+	maven openjdk-8-jdk \
+	rake ruby-nokogiri
+
+# Add bintray repository where the SBT binaries are published
+RUN echo "deb [trusted=yes] https://dl.bintray.com/sbt/debian /" > /etc/apt/sources.list.d/sbt.list
+RUN apt-get update && apt-get -y install sbt
 
 # Cleaning
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-# Add bintray repository where the SBT binaries are published
-RUN curl -sS https://bintray.com/sbt/rpm/rpm | \
-	tee /etc/yum.repos.d/bintray-sbt-rpm.repo
-RUN yum -y install sbt
-
 # Environment for the `root` user
 ADD resources/bashrc /root/.bashrc
-
-# Java
-ENV JDK_VERSION 8u192
-ENV JDK_VERSION_MINOR b12
-ENV JDK_RPM jdk-$JDK_VERSION-linux-x64.rpm
-ENV JDK_RPM_TOKEN 750e1c8617c5452694857ad95c3ee230
-ENV JDK_BASE_URL http://download.oracle.com/otn-pub/java/jdk
-ENV JDK_RPM_URL $JDK_BASE_URL/$JDK_VERSION-$JDK_VERSION_MINOR/$JDK_RPM_TOKEN
-ENV JDK_GETTER get_oracle_jdk_linux_x64.sh
+RUN git clone https://github.com/magicmonty/bash-git-prompt.git /root/.bash-git-prompt --depth=1
 
 # Scala
 ENV SCALA_TAR_URL http://www.scala-lang.org/files/archive
@@ -60,16 +51,6 @@ ENV SCALA_VERSION 2.11.8
 ENV SBT_VERSION 1.2.7
 ENV SBT_OPTS -Xmx4G
 ENV SBT_GBL $HOME/.sbt/1.2/global.sbt
-
-# Download Java in a robust way
-#ADD $JDK_GETTER /usr/local/bin
-#RUN chmod a+x /usr/local/bin/$JDK_GETTER
-#RUN /usr/local/bin/$JDK_GETTER
-
-# Download Java in a ad hoc way (see https://stackoverflow.com/questions/10268583/downloading-java-jdk-on-linux-via-wget-is-shown-license-page-instead)
-# and install it
-RUN wget -c --header "Cookie: oraclelicense=accept-securebackup-cookie" $JDK_RPM_URL/$JDK_RPM && \
-	yum -y install $JDK_RPM && rm -f $JDK_RPM
 
 # Download and install Scala
 RUN mkdir -p /opt && \
@@ -104,7 +85,7 @@ WORKDIR $HOME
 USER build
 
 # Git prompt
-RUN git clone https://github.com/magicmonty/bash-git-prompt.git ~/.bash-git-prompt --depth=1
+RUN git clone https://github.com/magicmonty/bash-git-prompt.git $HOME/.bash-git-prompt --depth=1
 
 # Run SBT once, at Docker build time, so that it does not download
 # the dependencies at run time
