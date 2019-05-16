@@ -1,6 +1,8 @@
 Docker images to support big data development on Scala/Java stacks
 ==================================================================
 
+[![Docker Repository on Quay](https://quay.io/repository/bigdatadevelopment/base/status "Docker Repository on Quay")](https://quay.io/repository/bigdatadevelopment/base)
+
 # Introduction
 [That project](https://github.com/bom4v/docker-images)
 produces Docker images, hosted on [dedicated
