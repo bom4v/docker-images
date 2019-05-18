@@ -1,9 +1,9 @@
 #
 # http://github.com/bom4v/docker-images/tree/master/ubuntu1810
 #
-# Scala and SBT on Ubuntu 18.10 Cosmic with Java OpenJDK 8
+# Scala and SBT on Ubuntu 19.04 (Disco Dingo) with Java OpenJDK 8
 #
-FROM docker.io/ubuntu:18.10
+FROM docker.io/ubuntu:19.04
 MAINTAINER Denis Arnaud <denis.arnaud_github at m4x dot org>
 LABEL version="0.1"
 
@@ -27,6 +27,9 @@ ENV LC_ALL $LANG
 # Configure the time-zone
 RUN apt-get -y install tzdata && echo "Europe/Paris" > /etc/timezone && \
 	dpkg-reconfigure -f noninteractive tzdata
+
+# GPG keys
+RUN apt-get -y install gnupg2 && apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 99E82A75642AC823
 
 # Basic, Java and Scala packages
 RUN apt-get -y update && \
