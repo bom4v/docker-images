@@ -1,5 +1,5 @@
 #
-# http://github.com/bom4v/docker-images/tree/master/ubuntu1810
+# http://github.com/bom4v/docker-images/tree/master/debian9
 #
 # Scala and SBT on Debian 9 with Java OpenJDK 8
 #
@@ -48,8 +48,8 @@ RUN git clone https://github.com/magicmonty/bash-git-prompt.git /root/.bash-git-
 
 # Scala
 ENV SCALA_TAR_URL http://www.scala-lang.org/files/archive
-ENV SCALA_VERSION 2.11.8
-ENV SBT_VERSION 1.2.7
+ENV SCALA_VERSION 2.11.12
+ENV SBT_VERSION 1.2.8
 ENV SBT_OPTS -Xmx4G
 ENV SBT_GBL $HOME/.sbt/1.2/global.sbt
 

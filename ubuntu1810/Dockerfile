@@ -51,8 +51,8 @@ RUN git clone https://github.com/magicmonty/bash-git-prompt.git /root/.bash-git-
 
 # Scala
 ENV SCALA_TAR_URL http://www.scala-lang.org/files/archive
-ENV SCALA_VERSION 2.11.8
-ENV SBT_VERSION 1.2.7
+ENV SCALA_VERSION 2.11.12
+ENV SBT_VERSION 1.2.8
 ENV SBT_OPTS -Xmx4G
 ENV SBT_GBL $HOME/.sbt/1.2/global.sbt
 
@@ -95,7 +95,7 @@ RUN git clone https://github.com/magicmonty/bash-git-prompt.git $HOME/.bash-git-
 # the dependencies at run time
 RUN mkdir -p $BOM4V_DIR
 WORKDIR $BOM4V_DIR
-RUN sbt about
+RUN (sbt about | grep 2)
 
 # Entry point
 CMD ["/bin/bash"]

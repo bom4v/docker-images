@@ -42,7 +42,7 @@ ADD resources/bashrc /root/.bashrc
 
 # Scala
 ENV SCALA_TAR_URL http://www.scala-lang.org/files/archive
-ENV SCALA_VERSION 2.12.8
+ENV SCALA_VERSION 2.11.12
 ENV SBT_OPTS -Xmx4G
 ENV SBT_GBL $HOME/.sbt/1.2/global.sbt
 

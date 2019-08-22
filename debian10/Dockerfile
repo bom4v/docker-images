@@ -1,9 +1,9 @@
 #
-# http://github.com/bom4v/docker-images/tree/master/ubuntu1804
+# http://github.com/bom4v/docker-images/tree/master/debian10
 #
-# Scala and SBT on Ubuntu 18.04 Bionic Beaver with Java OpenJDK 8
+# Scala and SBT on Debian 10 with Java OpenJDK 8
 #
-FROM docker.io/ubuntu:18.04
+FROM docker.io/debian:10
 MAINTAINER Denis Arnaud <denis.arnaud_github at m4x dot org>
 LABEL version="0.1"
 
