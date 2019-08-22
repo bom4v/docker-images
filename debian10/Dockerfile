@@ -1,7 +1,7 @@
 #
 # http://github.com/bom4v/docker-images/tree/master/debian10
 #
-# Scala and SBT on Debian 10 with Java OpenJDK 8
+# Scala and SBT on Debian 10 (Buster) with Java OpenJDK 11
 #
 FROM docker.io/debian:10
 MAINTAINER Denis Arnaud <denis.arnaud_github at m4x dot org>
@@ -32,7 +32,7 @@ RUN apt-get -y update && \
 	keychain gawk bash-completion vim-nox emacs-nox apt-utils keyutils ftp \
 	bzip2 gzip tar unzip lsb-release man manpages \
 	sqlite3 python python3 \
-	maven openjdk-8-jdk \
+	maven openjdk-11-jdk \
 	rake ruby-nokogiri
 
 # Add bintray repository where the SBT binaries are published
@@ -92,7 +92,7 @@ RUN git clone https://github.com/magicmonty/bash-git-prompt.git $HOME/.bash-git-
 # the dependencies at run time
 RUN mkdir -p $BOM4V_DIR
 WORKDIR $BOM4V_DIR
-RUN sbt about
+RUN (sbt about | grep 2)
 
 # Entry point
 CMD ["/bin/bash"]

@@ -1,7 +1,7 @@
 #
 # http://github.com/bom4v/docker-images/tree/master/ubuntu1804
 #
-# Scala and SBT on Ubuntu 18.04 Bionic Beaver with Java OpenJDK 8
+# Scala and SBT on Ubuntu 18.04 (Bionic Beaver) with Java OpenJDK 8
 #
 FROM docker.io/ubuntu:18.04
 MAINTAINER Denis Arnaud <denis.arnaud_github at m4x dot org>

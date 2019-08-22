@@ -13,12 +13,15 @@ on the Java Virtual Machine (JVM) ecosystem.
 [Apache Spark](http://spark.apache.org) is featured in particular.
 SBT-built artefacts can for instance be launched on a stand-alone Spark version.
 
-The supported Linux distributions are
-[CentOS 7](https://wiki.centos.org/Manuals/ReleaseNotes/CentOS7),
-[Ubuntu 18.10 (Cosmic Cuttlefish)](http://releases.ubuntu.com/18.10/)
-and [Debian 9 (Stretch)](https://www.debian.org/releases/stretch/).
-[Ubuntu 18.04 LTS (Bionic Beaver)](http://releases.ubuntu.com/18.04/)
-may be supported next.
+The supported Linux distributions are:
+- [CentOS 7](https://wiki.centos.org/Manuals/ReleaseNotes/CentOS7)
+- [Ubuntu 19.04 (Disco Dingo)](http://releases.ubuntu.com/19.04/)
+- [Ubuntu 18.10 (Cosmic Cuttlefish)](http://releases.ubuntu.com/18.10/)
+- [Ubuntu 18.04 LTS (Bionic Beaver)](http://releases.ubuntu.com/18.04/)
+- [Debian 10 (Buster)](https://www.debian.org/releases/buster/)
+- [Debian 9 (Stretch)](https://www.debian.org/releases/stretch/)
+CentOS 8 may be supported next,
+[when it will be released](https://wiki.centos.org/About/Building_8).
 
 Every time some changes are committed on the [project's GitHub
 repository](https://github.com/bom4v/docker-images),
@@ -43,7 +46,8 @@ available for every one to use.
 
 # Using the pre-built development images
 * Start the Docker container featuring the target Linux distribution
-  (`<linux-distrib>` may be one of `centos7`, `ubuntu1810` or `debian9`):
+  (`<linux-distrib>` may be one of `centos7`, `ubuntu1904`, `ubuntu1810`,
+  `ubuntu1804`, `debian10` or `debian9`):
 ```bash
 $ docker pull bigdatadevelopment/base:<linux-distrib>
 $ docker run --rm -v ~/.ssh/id_rsa:/home/build/.ssh/id_rsa -v ~/.ssh/id_rsa.pub:/home/build/.ssh/id_rsa.pub -it bigdatadevelopment/base:<linux-distrib>
@@ -79,7 +83,9 @@ Resolving deltas: 100% (3665/3665), done.
 
 # Customize a Docker Image
 The images may be customized, and pushed to Docker Cloud;
-`<linux-distrib>` may be one of `centos7`, `ubuntu1810` or `debian9`:
+`<linux-distrib>` may be one of `centos7`, `ubuntu1904`, `ubuntu1810`, 
+`ubuntu1804`, `debian10` or `debian9`:
+
 ```bash
 $ mkdir -p ~/dev
 $ cd ~/dev
@@ -95,7 +101,7 @@ $ docker push bigdatadevelopment/<linux-distrib>:beta
 # TODO
 For any of the following features, an issue may be open
 [on GitHub](https://github.com/bom4v/docker-images/issues):
-1. Support other Linux distributions, for instance Ubuntu 18.04 LTS
+1. Support other Linux distributions, for instance Ubuntu 16.04 LTS
    or Fedora (_e.g._, `fedora`)
 2. Automate regular rebuilds (_e.g._, once a month for CentOS or Ubuntu)
 
