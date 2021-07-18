@@ -4,7 +4,8 @@
 # Scala and SBT on Ubuntu 18.04 (Bionic Beaver) with Java OpenJDK 8
 #
 FROM docker.io/ubuntu:18.04
-MAINTAINER Denis Arnaud <denis.arnaud_github at m4x dot org>
+
+LABEL authors="Denis Arnaud <denis.arnaud_github at m4x dot org>"
 LABEL version="0.1"
 
 # Environment
@@ -32,12 +33,14 @@ RUN apt-get -y update && \
 	keychain gawk bash-completion vim-nox emacs-nox apt-utils keyutils ftp \
 	bzip2 gzip tar unzip lsb-release man manpages \
 	sqlite3 python python3 \
-	maven openjdk-8-jdk \
+	maven openjdk-11-jdk \
 	rake ruby-nokogiri
 
-# Add bintray repository where the SBT binaries are published
-RUN echo "deb [trusted=yes] https://dl.bintray.com/sbt/debian /" > /etc/apt/sources.list.d/sbt.list
-RUN apt-get update && apt-get -y install sbt
+# Add SBT official repository
+RUN echo "deb https://repo.scala-sbt.org/scalasbt/debian /" | tee -a /etc/apt/sources.list.d/sbt.list
+RUN curl -sL "https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x2EE0EA64E40A89B84B2DF73499E82A75642AC823" | apt-key add
+RUN apt-get -qq update && \
+    apt-get -y install sbt
 
 # Cleaning
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
@@ -48,8 +51,8 @@ RUN git clone https://github.com/magicmonty/bash-git-prompt.git /root/.bash-git-
 
 # Scala
 ENV SCALA_TAR_URL http://www.scala-lang.org/files/archive
-ENV SCALA_VERSION 2.11.12
-ENV SBT_VERSION 1.2.8
+ENV SCALA_VERSION 2.12.14
+ENV SBT_VERSION 1.4.9
 ENV SBT_OPTS -Xmx4G
 ENV SBT_GBL $HOME/.sbt/1.2/global.sbt
 
