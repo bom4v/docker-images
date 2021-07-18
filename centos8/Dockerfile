@@ -42,7 +42,7 @@ RUN dnf -y install less htop net-tools which sudo man vim \
       zlib-devel bzip2-devel gzip unzip tar rpmconf yum-utils \
       openssl-devel libffi-devel \
       readline-devel sqlite-devel mysql-devel \
-      rake rubygem-rake rubygem-nokogiri
+      rake rubygem-rake
 
 # Install SBT
 RUN dnf -y install https://repo.scala-sbt.org/scalasbt/rpm/sbt-$SBT_VERSION.rpm

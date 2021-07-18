@@ -23,7 +23,7 @@ ENV LC_ALL $LANG
 RUN apt-get -qq update && \
     apt-get -y install apt-utils && \
     apt-get -y install libterm-ui-perl && \
-    apt-get -y install locales && 
+    apt-get -y install locales && \
     apt-get -y upgrade
 
 # Generate the locales
