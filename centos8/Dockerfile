@@ -23,6 +23,7 @@ ENV LANGUAGE en_US:en
 ENV LANG en_US.UTF-8
 ENV LC_ALL $LANG
 ENV BOM4V_DIR $HOME/dev/bom4v
+ENV RUBY_VERSION 3.2.0
 ENV SBT_VERSION 1.8.0
 
 # Import the Centos GPG key to prevent warnings
@@ -56,12 +57,8 @@ RUN dnf -y install less htop net-tools which sudo man vim \
     redhat-rpm-config \
 	openssl-devel libffi-devel libyaml-devel \
 	readline-devel sqlite-devel mysql-devel \
-    ruby-devel rubygems-devel rake rubygem-rake \
 	jq
 RUN dnf -y clean all
-
-# Install the nokogiri Gem (to enable YAML parsing)
-RUN gem install nokogiri --platform=ruby
 
 # Install SBT
 RUN dnf -y install https://repo.scala-sbt.org/scalasbt/rpm/sbt-$SBT_VERSION.rpm
@@ -105,8 +102,20 @@ RUN chmod 640 $HOME/.bashrc $HOME/.gitconfig $HOME/.vimrc
 RUN chown -R build.build $HOME
 
 # Switch to the `build` user
-WORKDIR $HOME
 USER build
+WORKDIR $BOM4V_DIR
+
+# Ruby - https://www.linkedin.com/pulse/how-install-ruby-centos-7-amal-krishna-r
+RUN git clone --depth 1 https://github.com/rbenv/rbenv.git $HOME/.rbenv
+RUN git clone --depth 1 https://github.com/rbenv/ruby-build.git $HOME/.rbenv/plugins/ruby-build
+
+# Install Ruby
+RUN source $HOME/.bashrc && \
+	rbenv install $RUBY_VERSION && \
+	rbenv global $RUBY_VERSION
+
+# Install the nokogiri Gem
+RUN source $HOME/.bashrc && gem install nokogiri --platform=ruby
 
 # Run SBT once, at Docker build time, so that it does not download
 # the dependencies at run time
