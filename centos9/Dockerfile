@@ -1,16 +1,16 @@
 #
-# Dockerfile: https://github.com/bom4v/docker-images/tree/master/centos8/Dockerfile
+# Dockerfile: https://github.com/bom4v/docker-images/tree/master/centos9/Dockerfile
 # Docker Hub/Cloud page: https://cloud.docker.com/u/infrahelpers/repository/docker/infrahelpers/javabigdata
 #
-# Scala and SBT on CentOS 8 with Java OpenJDK 11
+# Scala and SBT on CentOS 9 with Java OpenJDK 11
 #
 # Base image:
 # * Hub/cloud: 'stream8' on
 #   + Docker.io: https://hub.docker.com/r/tgagor/centos-stream 
 #   + Quay.io: https://quay.io/repository/centos/centos?tab=tags
-# * Dockerfile: https://github.com/tgagor/docker-centos/blob/master/stream8/Dockerfile
+# * Dockerfile: https://github.com/tgagor/docker-centos/blob/master/stream9/Dockerfile
 #
-FROM quay.io/centos/centos:stream8
+FROM quay.io/centos/centos:stream9
 
 LABEL authors="Denis Arnaud <denis.arnaud_github at m4x dot org>"
 LABEL version="0.1"
@@ -28,12 +28,12 @@ ENV SBT_VERSION 1.8.0
 RUN rpm --import http://mirror.centos.org/centos/RPM-GPG-KEY-CentOS-Official &&\
   rpm --import https://www.centos.org/keys/RPM-GPG-KEY-CentOS-Testing
 
-# Add the repository for PowerTools
+# Add the repository for CodeReady Linux Builder (CRB)
 RUN dnf -y install 'dnf-command(config-manager)'
-RUN dnf config-manager --set-enabled powertools
+RUN dnf config-manager --set-enabled crb
 
 # Add EPEL support
-RUN dnf -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
+RUN dnf -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm
 
 # Update of CentOS
 RUN dnf -y clean all && \
@@ -47,9 +47,10 @@ RUN dnf -y install glibc-locale-source glibc-langpack-en && \
 ADD resources/bashrc /root/.bashrc
 
 # A few useful packages
+RUN dnf -y install curl-minimal --skip-broken --best --allowerasing
 RUN dnf -y install less htop net-tools which sudo man vim \
-	git-all wget curl file bash-completion keyutils \
-	zlib-devel bzip2-devel gzip unzip tar patch rpmconf yum-utils \
+	git-all wget file bash-completion keyutils \
+	zlib-devel bzip2-devel xz-devel gzip unzip tar patch rpmconf yum-utils \
 	openssl-devel libffi-devel \
 	readline-devel sqlite-devel mysql-devel \
 	rake rubygem-rake rubygem-nokogiri \

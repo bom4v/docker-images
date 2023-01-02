@@ -44,8 +44,9 @@ available for every one to use.
 
 # Using the pre-built development images
 * Start the Docker container featuring the target Linux distribution
-  (`<linux-distrib>` may be one of `centos7`, `centos8`, `ubuntu1804`,
-  `ubuntu2004`, `debian10` or `debian9`):
+  (`<linux-distrib>` may be one of `centos8`, `centos7`,
+  `debian11`, `debian10`,
+  `ubuntu2204`, `ubuntu2004` or `ubuntu1804`):
 ```bash
 $ docker pull infrahelpers/javabigdata:<linux-distrib>
 $ docker run --rm -v ~/.ssh/id_rsa:/home/build/.ssh/id_rsa -v ~/.ssh/id_rsa.pub:/home/build/.ssh/id_rsa.pub -it infrahelpers/javabigdata:<linux-distrib>
@@ -81,19 +82,19 @@ Resolving deltas: 100% (3665/3665), done.
 
 # Customize a Docker Image
 The images may be customized, and pushed to Docker Cloud;
-`<linux-distrib>` may be one of `centos7`, `centos8`, `ubuntu1804`, 
-`ubuntu2004`, `debian10` or `debian9`:
-
+`<linux-distrib>` may be one of `centos8`, `centos7`,
+  `debian11`, `debian10`,
+  `ubuntu2204`, `ubuntu2004` or `ubuntu1804`:
 ```bash
 $ mkdir -p ~/dev
 $ cd ~/dev
 $ git clone https://github.com/bom4v/docker-images.git jvm-docker-images
 $ cd jvm-docker-images
 $ vi <linux-distrib>/Dockerfile
-$ docker build -t infrahelpers/<linux-distrib> --squash <linux-distrib>/
-$ docker run --rm -v ~/.ssh/id_rsa:/home/build/.ssh/id_rsa -v ~/.ssh/id_rsa.pub:/home/build/.ssh/id_rsa.pub -it infrahelpers/<linux-distrib>
+$ docker build -t infrahelpers/javabigdata:<linux-distrib> <linux-distrib>/
+$ docker run --rm -v ~/.ssh/id_rsa:/home/build/.ssh/id_rsa -v ~/.ssh/id_rsa.pub:/home/build/.ssh/id_rsa.pub -it infrahelpers/javabigdata:<linux-distrib>
 [build@9..d jvm-docker-images]$ exit
-$ docker push infrahelpers/<linux-distrib>
+$ docker push infrahelpers/javabigdata:<linux-distrib>
 ```
 
 # TODO
