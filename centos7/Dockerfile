@@ -1,8 +1,9 @@
 #
 # Dockerfile: https://github.com/bom4v/docker-images/tree/master/centos7/Dockerfile
 # Docker Hub/Cloud page: https://cloud.docker.com/u/infrahelpers/repository/docker/infrahelpers/javabigdata
+# Usual Docker tag: infrahelpers/javabigdata:centos7
 #
-# Scala and SBT on CentOS 7 with Java OpenJDK 8
+# Scala and SBT on CentOS 7 with Java OpenJDK 11
 #
 FROM docker.io/centos:7
 

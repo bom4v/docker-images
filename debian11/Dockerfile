@@ -1,8 +1,9 @@
 #
-# Dockerfile: http://github.com/bom4v/docker-images/tree/master/debian9/Dockerfile
+# Dockerfile: http://github.com/bom4v/docker-images/tree/master/debian11/Dockerfile
 # Docker Hub/Cloud page: https://cloud.docker.com/u/infrahelpers/repository/docker/infrahelpers/cpppython
+# Usual Docker tag: infrahelpers/javabigdata:debian11
 #
-# Scala and SBT on Debian 11 (Stretch) with Java OpenJDK 11
+# Scala and SBT on Debian 11 (Bullseye) with Java OpenJDK 11
 #
 FROM docker.io/debian:11
 

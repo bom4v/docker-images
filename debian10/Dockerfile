@@ -1,5 +1,7 @@
 #
-# http://github.com/bom4v/docker-images/tree/master/debian10
+# Dockerfile: http://github.com/bom4v/docker-images/tree/master/debian10/Dockerfile
+# Docker Hub/Cloud page: https://cloud.docker.com/u/infrahelpers/repository/docker/infrahelpers/cpppython
+# Usual Docker tag: infrahelpers/javabigdata:debian10
 #
 # Scala and SBT on Debian 10 (Buster) with Java OpenJDK 11
 #
@@ -15,24 +17,36 @@ ENV LANGUAGE en_US:en
 ENV LANG en_US.UTF-8
 ENV LC_ALL $LANG
 ENV BOM4V_DIR $HOME/dev/bom4v
+ENV SCALA_VERSION 2.12.17
+ENV SBT_VERSION 1.8.0
 
 # Update the system
-RUN apt-get update && apt-get -y install locales apt-utils && apt-get -y upgrade
+RUN echo "Europe/Paris" > /etc/timezone
+RUN echo 'APT::Get::Assume-Yes "true";' > /etc/apt/apt.conf.d/90-yes
+RUN apt-get -qq update
+RUN DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends \
+	apt-utils apt-transport-https \
+	ca-certificates locales locales-all tzdata sudo \
+	zip unzip gzip unzip bzip2 xz-utils tar p7zip-full \
+	curl wget netcat net-tools aptitude
 
 # Generate the locales
-RUN locale-gen $LANG
+RUN locale-gen $LANG && \
+	update-locale LANG=$LANG LANGUAGE=$LANGUAGE LC_ALL=$LC_ALL
 
 # Configure the time-zone
-RUN apt-get -y install tzdata && echo "Europe/Paris" > /etc/timezone && \
-	dpkg-reconfigure -f noninteractive tzdata
+RUN dpkg-reconfigure -f noninteractive tzdata
 
 # Basic, Java and Scala packages
 RUN apt-get -y update && \
-	apt-get -y install sudo less htop net-tools wget curl screen git \
-	apt-transport-https ca-certificates gnupg2 software-properties-common \
-	keychain gawk bash-completion vim-nox emacs-nox apt-utils keyutils ftp \
-	bzip2 gzip tar unzip lsb-release man manpages \
-	sqlite3 python python3 \
+    apt-get -y install procps less htop screen \
+	git keychain gettext-base gawk \
+	bash-completion vim-nox emacs-nox apt-utils keyutils ftp \
+	zlib1g-dev libbz2-dev \
+	gnupg2 software-properties-common \
+	lsb-release man manpages \
+	sqlite3 libsqlite3-dev \
+	python3 libpython3-dev \
 	maven openjdk-11-jdk \
 	rake ruby-nokogiri
 
@@ -50,11 +64,9 @@ ADD resources/bashrc /root/.bashrc
 RUN git clone https://github.com/magicmonty/bash-git-prompt.git /root/.bash-git-prompt --depth=1
 
 # Scala
-ENV SCALA_TAR_URL http://www.scala-lang.org/files/archive
-ENV SCALA_VERSION 2.12.14
-ENV SBT_VERSION 1.4.9
+ENV SCALA_TAR_URL https://www.scala-lang.org/files/archive
 ENV SBT_OPTS -Xmx4G
-ENV SBT_GBL $HOME/.sbt/1.2/global.sbt
+ENV SBT_GBL $HOME/.sbt/1.0/global.sbt
 
 # Download and install Scala
 RUN mkdir -p /opt && \
