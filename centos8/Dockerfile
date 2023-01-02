@@ -51,7 +51,9 @@ ADD resources/bashrc /root/.bashrc
 RUN dnf -y install less htop net-tools which sudo man vim \
 	git-all wget curl file bash-completion keyutils \
 	zlib-devel bzip2-devel gzip unzip tar patch rpmconf yum-utils \
-	openssl-devel libffi-devel \
+	make m4 autoconf automake libtool \
+    langtable gcc gcc-c++ \
+	openssl-devel libffi-devel libyaml-devel \
 	readline-devel sqlite-devel mysql-devel \
 	rake rubygem-rake \
 	jq
