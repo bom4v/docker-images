@@ -1,5 +1,7 @@
 #
-# http://github.com/bom4v/docker-images/tree/master/ubuntu1904
+# Dockerfile: http://github.com/bom4v/docker-images/tree/master/ubuntu2004/Dockerfile
+# Docker Hub/Cloud page: https://cloud.docker.com/u/infrahelpers/repository/docker/infrahelpers/cpppython
+# Usual Docker tag: infrahelpers/javabigdata:ubuntu2004
 #
 # Scala and SBT on Ubuntu 20.04 (Focal Fossal) with Java OpenJDK 11
 #
@@ -12,29 +14,29 @@ LABEL version="0.1"
 ENV container docker
 ENV HOME /home/build
 ENV DEBIAN_FRONTEND noninteractive
-ENV BOM4V_DIR $HOME/dev/bom4v
-
-# Locales
 ENV LANGUAGE en_US:en
 ENV LANG en_US.UTF-8
 ENV LC_ALL $LANG
+ENV BOM4V_DIR $HOME/dev/bom4v
+ENV SCALA_VERSION 2.12.17
+ENV SBT_VERSION 1.8.0
 
 # Update the system
-RUN apt-get -qq update && \
-    apt-get -y install apt-utils && \
-    apt-get -y install libterm-ui-perl && \
-    apt-get -y install locales && \
-    apt-get -y upgrade
+RUN echo "Europe/Paris" > /etc/timezone
+RUN echo 'APT::Get::Assume-Yes "true";' > /etc/apt/apt.conf.d/90-yes
+RUN apt-get -qq update
+RUN DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends \
+	apt-utils apt-transport-https \
+	ca-certificates locales tzdata sudo \
+	zip unzip gzip bzip2 xz-utils tar unrar p7zip-full \
+	curl wget netcat net-tools aptitude
 
 # Generate the locales
 RUN locale-gen $LANG && \
-    update-locale LANG=$LANG LANGUAGE=$LANGUAGE LC_ALL=$LC_ALL
+	update-locale LANG=$LANG LANGUAGE=$LANGUAGE LC_ALL=$LC_ALL
 
 # Configure the time-zone
-RUN apt-get -qq update && \
-    apt-get -y install tzdata && \
-    echo "Europe/Paris" > /etc/timezone && \
-    dpkg-reconfigure -f noninteractive tzdata
+RUN dpkg-reconfigure -f noninteractive tzdata
 
 # GPG keys
 RUN apt-get -y install gnupg2 && \
@@ -42,14 +44,15 @@ RUN apt-get -y install gnupg2 && \
 
 # Basic, Java and Scala packages
 RUN apt-get -qq update && \
-    apt-get -y install sudo less htop netcat net-tools wget curl screen git \
-    apt-transport-https ca-certificates gnupg2 software-properties-common \
+    apt-get -y install less htop screen git \
+    software-properties-common \
     keychain gawk bash-completion vim-nox emacs-nox apt-utils keyutils ftp \
-    zip unzip gzip bzip2 xz-utils tar unrar p7zip-full \
     lsb-release man manpages \
-    sqlite3 python python3 \
+	sqlite3 libsqlite3-dev \
+	python3 libpython3-dev \
     maven openjdk-11-jdk \
-    rake ruby-nokogiri
+    rake ruby-nokogiri \
+	jq
 
 # Add SBT official repository
 RUN echo "deb https://repo.scala-sbt.org/scalasbt/debian /" | tee -a /etc/apt/sources.list.d/sbt.list
@@ -65,9 +68,7 @@ ADD resources/bashrc /root/.bashrc
 RUN git clone https://github.com/magicmonty/bash-git-prompt.git /root/.bash-git-prompt --depth=1
 
 # Scala
-ENV SCALA_TAR_URL http://www.scala-lang.org/files/archive
-ENV SCALA_VERSION 2.12.14
-ENV SBT_VERSION 1.4.9
+ENV SCALA_TAR_URL https://www.scala-lang.org/files/archive
 ENV SBT_OPTS -Xmx4G
 ENV SBT_GBL $HOME/.sbt/1.0/global.sbt
 

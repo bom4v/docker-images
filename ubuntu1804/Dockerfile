@@ -1,5 +1,7 @@
 #
-# http://github.com/bom4v/docker-images/tree/master/ubuntu1804
+# Dockerfile: http://github.com/bom4v/docker-images/tree/master/ubuntu1804/Dockerfile
+# Docker Hub/Cloud page: https://cloud.docker.com/u/infrahelpers/repository/docker/infrahelpers/cpppython
+# Usual Docker tag: infrahelpers/javabigdata:ubuntu2004
 #
 # Scala and SBT on Ubuntu 18.04 (Bionic Beaver) with Java OpenJDK 8
 #
@@ -15,6 +17,8 @@ ENV LANGUAGE en_US:en
 ENV LANG en_US.UTF-8
 ENV LC_ALL $LANG
 ENV BOM4V_DIR $HOME/dev/bom4v
+ENV SCALA_VERSION 2.12.17
+ENV SBT_VERSION 1.8.0
 
 # Update the system
 RUN apt-get update && apt-get -y install locales apt-utils && apt-get -y upgrade
@@ -50,9 +54,7 @@ ADD resources/bashrc /root/.bashrc
 RUN git clone https://github.com/magicmonty/bash-git-prompt.git /root/.bash-git-prompt --depth=1
 
 # Scala
-ENV SCALA_TAR_URL http://www.scala-lang.org/files/archive
-ENV SCALA_VERSION 2.12.14
-ENV SBT_VERSION 1.4.9
+ENV SCALA_TAR_URL https://www.scala-lang.org/files/archive
 ENV SBT_OPTS -Xmx4G
 ENV SBT_GBL $HOME/.sbt/1.2/global.sbt
 
