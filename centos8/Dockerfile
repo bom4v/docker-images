@@ -115,6 +115,11 @@ RUN source $HOME/.bashrc && \
 	rbenv install $RUBY_VERSION && \
 	rbenv global $RUBY_VERSION
 
+#
+USER root
+RUN chown -R build.build $HOME
+USER build
+
 # Install the nokogiri Gem
 RUN source $HOME/.bashrc && gem install nokogiri --platform=ruby
 
