@@ -53,11 +53,15 @@ RUN dnf -y install less htop net-tools which sudo man vim \
 	zlib-devel bzip2-devel gzip unzip tar patch rpmconf yum-utils \
 	make m4 autoconf automake libtool \
     langtable gcc gcc-c++ \
+    redhat-rpm-config \
 	openssl-devel libffi-devel libyaml-devel \
 	readline-devel sqlite-devel mysql-devel \
-	rake rubygem-rake \
+    ruby-devel rubygems-devel rake rubygem-rake \
 	jq
 RUN dnf -y clean all
+
+# Install the nokogiri Gem (to enable YAML parsing)
+RUN gem install nokogiri --platform=ruby
 
 # Install SBT
 RUN dnf -y install https://repo.scala-sbt.org/scalasbt/rpm/sbt-$SBT_VERSION.rpm
