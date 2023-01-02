@@ -51,10 +51,11 @@ ADD resources/bashrc /root/.bashrc
 # A few useful packages
 RUN dnf -y install less htop net-tools which sudo man vim \
 	git-all wget curl file bash-completion keyutils \
-	zlib-devel bzip2-devel gzip unzip tar patch rpmconf yum-utils \
+	zlib-devel bzip2-devel gzip unzip xz xz-devel \
+	tar patch rpmconf yum-utils \
 	make m4 autoconf automake libtool \
-    langtable gcc gcc-c++ \
-    redhat-rpm-config \
+	langtable gcc gcc-c++ \
+	redhat-rpm-config \
 	openssl-devel libffi-devel libyaml-devel \
 	readline-devel sqlite-devel mysql-devel \
 	jq
