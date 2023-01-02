@@ -1,9 +1,10 @@
 #
-# http://github.com/bom4v/docker-images/tree/master/debian9
+# Dockerfile: http://github.com/bom4v/docker-images/tree/master/debian9/Dockerfile
+# Docker Hub/Cloud page: https://cloud.docker.com/u/infrahelpers/repository/docker/infrahelpers/cpppython
 #
-# Scala and SBT on Debian 9 (Stretch) with Java OpenJDK 8
+# Scala and SBT on Debian 11 (Stretch) with Java OpenJDK 11
 #
-FROM docker.io/debian:9
+FROM docker.io/debian:11
 
 LABEL authors="Denis Arnaud <denis.arnaud_github at m4x dot org>"
 LABEL version="0.1"
@@ -15,26 +16,38 @@ ENV LANGUAGE en_US:en
 ENV LANG en_US.UTF-8
 ENV LC_ALL $LANG
 ENV BOM4V_DIR $HOME/dev/bom4v
+ENV SCALA_VERSION 2.12.17
+ENV SBT_VERSION 1.8.0
 
 # Update the system
-RUN apt-get update && apt-get -y install locales apt-utils && apt-get -y upgrade
+RUN echo "Europe/Paris" > /etc/timezone
+RUN echo 'APT::Get::Assume-Yes "true";' > /etc/apt/apt.conf.d/90-yes
+RUN apt-get -qq update
+RUN DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends \
+	apt-utils apt-transport-https \
+	ca-certificates locales locales-all tzdata sudo \
+	zip unzip gzip bzip2 xz-utils tar p7zip-full zlib1g-dev libbz2-dev \
+	curl wget netcat net-tools aptitude
 
 # Generate the locales
-RUN locale-gen $LANG
+RUN locale-gen $LANG && \
+	update-locale LANG=$LANG LANGUAGE=$LANGUAGE LC_ALL=$LC_ALL
 
 # Configure the time-zone
-RUN apt-get -y install tzdata && echo "Europe/Paris" > /etc/timezone && \
-	dpkg-reconfigure -f noninteractive tzdata
+RUN dpkg-reconfigure -f noninteractive tzdata
 
 # Basic, Java and Scala packages
 RUN apt-get -y update && \
-	apt-get -y install sudo less htop net-tools wget curl screen git \
-	apt-transport-https ca-certificates gnupg2 software-properties-common \
-	keychain gawk bash-completion vim-nox emacs-nox apt-utils keyutils ftp \
-	bzip2 gzip tar unzip lsb-release man manpages \
-	sqlite3 python python3 \
-	maven openjdk-8-jdk \
-	rake ruby-nokogiri
+    apt-get -y install procps less htop screen \
+	git keychain gettext-base gawk \
+	gnupg2 software-properties-common \
+	bash-completion vim-nox emacs-nox apt-utils keyutils ftp \
+	lsb-release man manpages \
+	sqlite3 libsqlite3-dev \
+	python3 libpython3-dev \
+	maven openjdk-11-jdk \
+	rake ruby-nokogiri \
+	jq
 
 # Add SBT official repository
 RUN echo "deb https://repo.scala-sbt.org/scalasbt/debian /" | tee -a /etc/apt/sources.list.d/sbt.list
@@ -50,11 +63,9 @@ ADD resources/bashrc /root/.bashrc
 RUN git clone https://github.com/magicmonty/bash-git-prompt.git /root/.bash-git-prompt --depth=1
 
 # Scala
-ENV SCALA_TAR_URL http://www.scala-lang.org/files/archive
-ENV SCALA_VERSION 2.12.14
-ENV SBT_VERSION 1.4.9
+ENV SCALA_TAR_URL https://www.scala-lang.org/files/archive
 ENV SBT_OPTS -Xmx4G
-ENV SBT_GBL $HOME/.sbt/1.2/global.sbt
+ENV SBT_GBL $HOME/.sbt/1.0/global.sbt
 
 # Download and install Scala
 RUN mkdir -p /opt && \
@@ -95,7 +106,7 @@ RUN git clone https://github.com/magicmonty/bash-git-prompt.git $HOME/.bash-git-
 # the dependencies at run time
 RUN mkdir -p $BOM4V_DIR
 WORKDIR $BOM4V_DIR
-RUN (sbt about | grep 2)
+RUN sbt about
 
 # Entry point
 CMD ["/bin/bash"]

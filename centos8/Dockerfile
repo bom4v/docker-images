@@ -52,7 +52,7 @@ RUN dnf -y install less htop net-tools which sudo man vim \
 	zlib-devel bzip2-devel gzip unzip tar patch rpmconf yum-utils \
 	openssl-devel libffi-devel \
 	readline-devel sqlite-devel mysql-devel \
-	rake rubygem-rake rubygem-nokogiri \
+	rake rubygem-rake \
 	jq
 RUN dnf -y clean all
 
