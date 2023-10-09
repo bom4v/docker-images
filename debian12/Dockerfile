@@ -45,7 +45,7 @@ RUN apt-get -y update && \
 	lsb-release man manpages \
 	sqlite3 libsqlite3-dev \
 	python3 libpython3-dev \
-	maven openjdk-11-jdk \
+	maven openjdk-17-jdk \
 	rake ruby-nokogiri \
 	jq
 
