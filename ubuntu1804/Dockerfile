@@ -17,11 +17,11 @@ ENV LANGUAGE en_US:en
 ENV LANG en_US.UTF-8
 ENV LC_ALL $LANG
 ENV BOM4V_DIR $HOME/dev/bom4v
-ENV SCALA_VERSION 2.12.17
-ENV SBT_VERSION 1.8.0
+ENV SCALA_VERSION 2.12.18
 
 # Update the system
-RUN apt-get update && apt-get -y install locales apt-utils && apt-get -y upgrade
+RUN apt-get -qq update && apt-get -y upgrade && \
+    apt-get -y install locales apt-utils
 
 # Generate the locales
 RUN locale-gen $LANG
@@ -56,7 +56,7 @@ RUN git clone https://github.com/magicmonty/bash-git-prompt.git /root/.bash-git-
 # Scala
 ENV SCALA_TAR_URL https://www.scala-lang.org/files/archive
 ENV SBT_OPTS -Xmx4G
-ENV SBT_GBL $HOME/.sbt/1.2/global.sbt
+ENV SBT_GBL $HOME/.sbt/global.sbt
 
 # Download and install Scala
 RUN mkdir -p /opt && \

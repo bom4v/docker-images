@@ -23,7 +23,8 @@ ENV LANGUAGE en_US:en
 ENV LANG en_US.UTF-8
 ENV LC_ALL $LANG
 ENV BOM4V_DIR $HOME/dev/bom4v
-ENV SBT_VERSION 1.8.0
+ENV SCALA_VERSION 2.12.18
+ENV SBT_VERSION 1.9.6
 
 # Import the Centos GPG key to prevent warnings
 RUN rpm --import http://mirror.centos.org/centos/RPM-GPG-KEY-CentOS-Official &&\
@@ -68,7 +69,6 @@ RUN dnf -y install java-11-openjdk-devel maven
 
 # Scala
 ENV SCALA_TAR_URL https://www.scala-lang.org/files/archive
-ENV SCALA_VERSION 2.12.17
 ENV SBT_OPTS -Xmx4G
 ENV SBT_GBL $HOME/.sbt/1.0/global.sbt
 

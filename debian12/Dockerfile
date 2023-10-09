@@ -1,11 +1,11 @@
 #
-# Dockerfile: http://github.com/bom4v/docker-images/tree/master/ubuntu2204/Dockerfile
+# Dockerfile: http://github.com/bom4v/docker-images/tree/master/debian12/Dockerfile
 # Docker Hub/Cloud page: https://cloud.docker.com/u/infrahelpers/repository/docker/infrahelpers/cpppython
-# Usual Docker tag: infrahelpers/javabigdata:ubuntu2204
+# Usual Docker tag: infrahelpers/javabigdata:debian12
 #
-# Scala and SBT on Ubuntu 22.04 (Jammy Jellyfish) with Java OpenJDK 11
+# Scala and SBT on Debian 12 (Bookworm) with Java OpenJDK 11
 #
-FROM docker.io/ubuntu:22.04
+FROM docker.io/debian:12
 
 LABEL authors="Denis Arnaud <denis.arnaud_github at m4x dot org>"
 LABEL version="0.1"
@@ -13,7 +13,6 @@ LABEL version="0.1"
 # Environment
 ENV container docker
 ENV HOME /home/build
-ENV DEBIAN_FRONTEND noninteractive
 ENV LANGUAGE en_US:en
 ENV LANG en_US.UTF-8
 ENV LC_ALL $LANG
@@ -24,11 +23,11 @@ ENV SCALA_VERSION 2.12.18
 RUN echo "Europe/Paris" > /etc/timezone
 RUN echo 'APT::Get::Assume-Yes "true";' > /etc/apt/apt.conf.d/90-yes
 RUN apt-get -qq update && apt-get -y upgrade
-RUN DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends \
+RUN DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends \
 	apt-utils apt-transport-https \
-	ca-certificates locales tzdata sudo \
-	zip unzip gzip bzip2 xz-utils tar unrar p7zip-full \
-	curl wget netcat net-tools aptitude
+	ca-certificates locales locales-all tzdata sudo \
+	zip unzip gzip bzip2 xz-utils tar p7zip-full zlib1g-dev libbz2-dev \
+	curl wget netcat-traditional net-tools aptitude
 
 # Generate the locales
 RUN locale-gen $LANG && \
@@ -37,20 +36,17 @@ RUN locale-gen $LANG && \
 # Configure the time-zone
 RUN dpkg-reconfigure -f noninteractive tzdata
 
-# GPG keys
-RUN apt-get -y install gnupg2 && \
-    apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 99E82A75642AC823
-
 # Basic, Java and Scala packages
-RUN apt-get -qq update && \
-    apt-get -y install less htop screen git \
-    software-properties-common \
-    keychain gawk bash-completion vim-nox emacs-nox apt-utils keyutils ftp \
-    lsb-release man manpages \
+RUN apt-get -y update && \
+    apt-get -y install procps less htop screen \
+	git keychain gettext-base gawk \
+	gnupg2 software-properties-common \
+	bash-completion vim-nox emacs-nox apt-utils keyutils ftp \
+	lsb-release man manpages \
 	sqlite3 libsqlite3-dev \
 	python3 libpython3-dev \
-    maven openjdk-11-jdk \
-    rake ruby-nokogiri \
+	maven openjdk-11-jdk \
+	rake ruby-nokogiri \
 	jq
 
 # Add SBT official repository
@@ -73,11 +69,11 @@ ENV SBT_GBL $HOME/.sbt/global.sbt
 
 # Download and install Scala
 RUN mkdir -p /opt && \
-    wget $SCALA_TAR_URL/scala-$SCALA_VERSION.tgz && \
-    tar xvf scala-$SCALA_VERSION.tgz && \
-    mv scala-$SCALA_VERSION /opt && \
-    ln -s /opt/scala-$SCALA_VERSION /opt/scala && \
-    rm -f scala-$SCALA_VERSION.tgz
+	wget $SCALA_TAR_URL/scala-$SCALA_VERSION.tgz && \
+	tar xvf scala-$SCALA_VERSION.tgz && \
+	mv scala-$SCALA_VERSION /opt && \
+	ln -s /opt/scala-$SCALA_VERSION /opt/scala && \
+	rm -f scala-$SCALA_VERSION.tgz
 
 ENV PATH $PATH:/opt/scala/bin
 

@@ -17,13 +17,12 @@ ENV LANGUAGE en_US:en
 ENV LANG en_US.UTF-8
 ENV LC_ALL $LANG
 ENV BOM4V_DIR $HOME/dev/bom4v
-ENV SCALA_VERSION 2.12.17
-ENV SBT_VERSION 1.8.0
+ENV SCALA_VERSION 2.12.18
 
 # Update the system
 RUN echo "Europe/Paris" > /etc/timezone
 RUN echo 'APT::Get::Assume-Yes "true";' > /etc/apt/apt.conf.d/90-yes
-RUN apt-get -qq update
+RUN apt-get -qq update && apt-get -y upgrade
 RUN DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends \
 	apt-utils apt-transport-https \
 	ca-certificates locales locales-all tzdata sudo \
@@ -66,7 +65,7 @@ RUN git clone https://github.com/magicmonty/bash-git-prompt.git /root/.bash-git-
 # Scala
 ENV SCALA_TAR_URL https://www.scala-lang.org/files/archive
 ENV SBT_OPTS -Xmx4G
-ENV SBT_GBL $HOME/.sbt/1.0/global.sbt
+ENV SBT_GBL $HOME/.sbt/global.sbt
 
 # Download and install Scala
 RUN mkdir -p /opt && \
